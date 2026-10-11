@@ -60,6 +60,11 @@ def style_base_home():
             align-items: stretch !important;
         }
 
+            /* title text on the dark background */
+        .stApp h1, .stApp h2, .stApp h3,
+       .stApp [data-testid="stHeading"] * {
+        color: #E0E3FF !important;
+    }
         /* the box */
         [data-testid="stColumn"] {
             background-color: #E0E3FF !important;
