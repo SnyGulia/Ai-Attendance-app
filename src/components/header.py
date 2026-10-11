@@ -6,7 +6,7 @@ def header_home():
     st.markdown(f"""
        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center; padding:px;border-margin-bottom:30px;margin-top:0px;">
           <image src="{logo_url}" ,style="height:100px;"/>
-         <h1 style=text-align:center;color:white;>AI<br>Attendance</h1>
+         <h1 style=text-align:center;color:white !important;>AI<br>Attendance</h1>
        </div> 
 
 
@@ -18,7 +18,7 @@ def header_dashboard():
     st.markdown(f"""
        <div style="display:flex;align-items:center;justify-content:center; padding:px;gap:10px;margin-top:0px;">
           <image src="{logo_url}" ,style="height:85px;"/>
-         <h2 style=text-align:center;color:#5865f2;>Snap<br>Class</h2>
+         <h2 style=text-align:center;color:#5865f2 !important;>AI<br>Attendance</h2>
        </div> 
 
 
