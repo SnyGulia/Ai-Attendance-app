@@ -19,3 +19,5 @@ librosa
 resemblyzer
 
 webrtcvad
+
+setuptools<81
