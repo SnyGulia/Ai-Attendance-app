@@ -17,6 +17,36 @@ def hide_streamlit_chrome():
     """, unsafe_allow_html=True)
 
 
+def force_readable_colors():
+    # Fixed dark text on the light background, so the app looks the same
+    # whether the visitor's browser/system is in light or dark mode
+    st.markdown("""
+        <style>
+        .stApp, .stApp p, .stApp label, .stApp li, .stApp h1, .stApp h2,
+        .stApp h3, .stApp h4, [data-testid="stMarkdownContainer"],
+        [data-testid="stWidgetLabel"] * {
+            color: #1e1e5a !important;
+        }
+
+        /* text typed inside boxes */
+        input, textarea {
+            color: #1e1e5a !important;
+            -webkit-text-fill-color: #1e1e5a !important;
+            background: white !important;
+        }
+        ::placeholder {
+            color: #6b6b8d !important;
+            opacity: 1 !important;
+        }
+
+        /* buttons keep white text */
+        .stApp button p {
+            color: white !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+
 def style_base_home():
     hide_streamlit_chrome()
     st.markdown("""
@@ -81,6 +111,7 @@ def style_background_dashboard():
 
 def style_base_layout():
     hide_streamlit_chrome()
+    force_readable_colors()
     st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
