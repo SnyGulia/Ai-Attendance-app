@@ -52,7 +52,7 @@ def style_base_home():
     st.markdown("""
         <style>
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-            background-color: #1e1b4b !important;
+            background-color: #fff1de !important;
         }
 
         /* make both boxes the same height */
