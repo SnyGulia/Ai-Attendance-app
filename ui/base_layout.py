@@ -42,10 +42,10 @@ def style_base_home():
         }
         [data-testid="stMainBlockContainer"] { max-width: 920px; padding-top: 2rem; }
         .brand-lockup { display:flex; align-items:center; gap:12px; margin: 0 0 3rem; }
-        .brand-mark { display:inline-flex; width:42px; height:42px; align-items:center;
+        .brand-mark { display:inline-flex; width:54px; height:54px; align-items:center;
             justify-content:center; border-radius:14px; background:linear-gradient(135deg,#6546f5,#8b5cf6); color:#fff;
-            font:800 15px 'Outfit',sans-serif; letter-spacing:-1px; }
-        .brand-name { color:#18323b; font:750 24px 'Outfit',sans-serif; letter-spacing:-.7px; }
+            font:800 18px 'Outfit',sans-serif; letter-spacing:-1px; box-shadow:0 8px 18px rgba(101,70,245,.22); }
+        .brand-name { color:#18323b; font:750 30px 'Outfit',sans-serif; letter-spacing:-.9px; }
         .brand-name span { color:#7653ef; }
         .hero-copy { max-width:700px; margin:0 auto 2.2rem; text-align:center; }
         .eyebrow, .portal-kicker { color:#7653ef; font:700 11px 'Outfit',sans-serif;
@@ -58,8 +58,8 @@ def style_base_home():
             background:#fff; border:1px solid #dce6e2; border-radius:18px;
             box-shadow:0 12px 34px rgba(24,50,59,.07); transition:transform .2s ease,box-shadow .2s ease; }
         .portal-card:hover { transform:translateY(-3px); box-shadow:0 18px 42px rgba(24,50,59,.11); }
-        .portal-icon { display:flex; width:38px; height:38px; align-items:center; justify-content:center;
-            border-radius:12px; background:#eee9ff; color:#7653ef; font-size:21px; }
+        .portal-icon { display:flex; width:54px; height:54px; align-items:center; justify-content:center;
+            border-radius:16px; background:#eee9ff; color:#7653ef; font-size:27px; }
         .student-icon { background:#fff0e8; color:#ed784b; }
         .portal-card .portal-kicker { margin-top:1.1rem; }
         .portal-card h2 { margin:.25rem 0 .5rem; color:#18323b; font:700 1.55rem 'Outfit',sans-serif; }
@@ -102,10 +102,10 @@ def style_base_layout():
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
         .brand-lockup { display:flex; align-items:center; gap:12px; margin:0 0 1.4rem; }
-        .brand-mark { display:inline-flex; width:42px; height:42px; align-items:center; justify-content:center;
+        .brand-mark { display:inline-flex; width:54px; height:54px; align-items:center; justify-content:center;
             border-radius:14px; background:linear-gradient(135deg,#6546f5,#8b5cf6); color:#fff;
-            font:800 15px 'Outfit',sans-serif; letter-spacing:-1px; }
-        .brand-name { color:#18323b; font:750 24px 'Outfit',sans-serif; letter-spacing:-.7px; }
+            font:800 18px 'Outfit',sans-serif; letter-spacing:-1px; box-shadow:0 8px 18px rgba(101,70,245,.22); }
+        .brand-name { color:#18323b; font:750 30px 'Outfit',sans-serif; letter-spacing:-.9px; }
         .brand-name span { color:#7653ef; }
         h1,h2,h3,h4,p,button,[data-testid="stHeading"] * {
             font-family:'Outfit',sans-serif !important;

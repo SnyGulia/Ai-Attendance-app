@@ -23,7 +23,9 @@ def home_screen():
     teacher_col, student_col = st.columns(2, gap="large")
     with teacher_col:
         st.markdown(
-            '<div class="portal-card"><div class="portal-icon">&#10022;</div>'
+            '<div class="portal-card"><div class="portal-icon">'
+            '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M3 20h18M5 20V8l7-4 7 4v12M9 20v-5h6v5M9 10h.01M15 10h.01"/></svg></div>'
             '<div class="portal-kicker">FOR EDUCATORS</div><h2>Teacher portal</h2>'
             '<p>Start a class session, review attendance, and manage your subjects.</p></div>',
             unsafe_allow_html=True,
@@ -34,7 +36,9 @@ def home_screen():
 
     with student_col:
         st.markdown(
-            '<div class="portal-card"><div class="portal-icon student-icon">&#9678;</div>'
+            '<div class="portal-card"><div class="portal-icon student-icon">'
+            '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3.5 3 8.5 3 12 0v-5M22 9v6"/></svg></div>'
             '<div class="portal-kicker">FOR STUDENTS</div><h2>Student portal</h2>'
             '<p>See your subjects, check attendance, and join a class with a code.</p></div>',
             unsafe_allow_html=True,
