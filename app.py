@@ -4,6 +4,7 @@ from src.student_screen import student_screen
 from src.home_screen import home_screen
 from src.student_screen import student_screen
 from src.components.dialog_auto_enroll import auto_enroll_dialog
+from src.components.footer import render_footer
 
 
 def main():
@@ -28,6 +29,8 @@ def main():
             st.rerun()
         if st.session_state.get('is_logged_in') and st.session_state.get('user_role') == 'student':
             auto_enroll_dialog(join_code)
+
+    render_footer()
 
 
 main()

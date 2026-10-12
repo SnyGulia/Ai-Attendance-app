@@ -1,7 +1,6 @@
 import streamlit as st
 from src.components.header import header_home
 from ui.base_layout import style_base_home, style_base_layout
-from src.components.footer import footer_home
 
 
 def home_screen():
@@ -52,4 +51,3 @@ def home_screen():
         '<span>Teacher-reviewed records</span><span>·</span><span>One simple workflow</span></div>',
         unsafe_allow_html=True,
     )
-    footer_home()
