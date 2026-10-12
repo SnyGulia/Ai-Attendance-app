@@ -126,6 +126,10 @@ def student_screen():
             st.header("Register New Profile")
             new_name = st.text_input(
                 "Enter Your Name", placeholder="e.g. Kabir")
+            new_email = st.text_input(
+                "Email", placeholder="e.g. kabir@gmail.com")
+            new_phone = st.text_input(
+                "Parent Phone", placeholder="e.g +91 1234567890")
 
             st.subheader("Optional  Voice Enrollment")
             st.info("Enroll for voice only attendance")
@@ -133,13 +137,13 @@ def student_screen():
             audio_data = None
 
             try:
-                audio_data = st.audio(
+                audio_data = st.audio_input(
                     "Record a short sentence ! Like I am Present My name is Simran.")
             except Exception:
                 st.error("Audio Failed")
 
             if st.button("Create Account ", type="primary"):
-                if new_name:
+                if new_name and new_email:
                     with st.spinner("Creating new profile..."):
                         img = np.array(Image.open(photo_source))
                         encodings = get_face_embeddings(img)
@@ -149,7 +153,7 @@ def student_screen():
                         if audio_data:
                             voice_emb = get_voice_embedding(audio_data.read())
                         response_data = create_student(
-                            new_name, face_embedding=face_emb, voice_embedding=voice_emb)
+                            new_name, face_embedding=face_emb, voice_embedding=voice_emb, email=new_email, parent_phone=new_phone)
 
                         if response_data:
                             train_classifier()
@@ -165,4 +169,4 @@ def student_screen():
                             "couldnt Capture Your Facial Feature for registration")
 
                 else:
-                    st.warning("Please Enter Your Name")
+                    st.warning("Please Enter Your Name and Email")

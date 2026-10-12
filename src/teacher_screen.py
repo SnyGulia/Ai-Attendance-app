@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 from ui.base_layout import style_background_dashboard, style_base_layout
 from src.components.header import header_dashboard
-from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects, get_attendance_for_teacher
+from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects, get_attendance_for_teacher, get_students_by_ids
 from src.components.dialog_create_subject import create_subject_dialog
 from src.components.subject_card import subject_card
 from src.components.dialog_share_subject import share_subject_dialog
@@ -13,6 +13,7 @@ from datetime import datetime
 import pandas as pd
 from src.components.dialog_attendance_result import attendance_result_dialog
 from src.components.dialog_voice_attendance import voice_attendance_dialog
+from src.notifications import notify_absentees
 
 
 def teacher_screen():
@@ -168,11 +169,30 @@ def teacher_tab_take_attendance():
                             'is_present': bool(is_present)
                         })
 
-            attendance_result_dialog(pd.DataFrame(results), attendance_to_log)
+                    # Remember who was absent so the "Notify absentees" button can use it
+                    st.session_state.absent_ids = [
+                        l['student_id'] for l in attendance_to_log if not l['is_present']]
+                    st.session_state.absent_subject_name = selected_subject_label
+
+                    attendance_result_dialog(
+                        pd.DataFrame(results), attendance_to_log)
 
     with c3:
         if st.button("Voice Attendance", type="primary", width="stretch"):
             voice_attendance_dialog(selected_subject_id)
+
+    # Notify absentees (email / SMS)
+    if st.session_state.get("absent_ids"):
+        st.divider()
+        st.write(
+            f"{len(st.session_state.absent_ids)} student(s) marked absent")
+        if st.button("Notify absentees", type="primary"):
+            absent_students = get_students_by_ids(
+                st.session_state.absent_ids)
+            sent, failed = notify_absentees(
+                absent_students, st.session_state.absent_subject_name)
+            st.success(f"Sent: {sent}, Failed: {failed}")
+            st.session_state.absent_ids = []
 
 
 def teacher_tab_manage_subjects():

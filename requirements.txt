@@ -21,3 +21,5 @@ resemblyzer
 webrtcvad
 
 setuptools<81
+
+twilio
