@@ -20,7 +20,7 @@ def student_dashboard():
     with c2:
         st.subheader(f"""Welcome {student_data['name']}""")
 
-        if st.button("Logout", type="tertiary", icon=":material/logout:", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Logout", type="tertiary", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["is_logged_in"] = False
             del st.session_state.student_data
             st.rerun()
@@ -40,9 +40,9 @@ def student_dashboard():
     st.space()
     c1, c2 = st.columns(2)
     with c1:
-        st.header(":material/auto_stories: Your Enrolled Subjects")
+        st.header("Your Enrolled Subjects")
     with c2:
-        if st.button("Enroll in subjects", type="primary", icon=":material/add_circle:", width="stretch"):
+        if st.button("Enroll in subjects", type="primary", width="stretch"):
             enroll_dialog()
 
     st.divider()
@@ -70,7 +70,7 @@ def student_dashboard():
         stats = stats_map.get(sid, {"total": 0, "attended": 0})
 
         def unenroll_button():
-            if st.button("Unenroll From this course", type="tertiary", icon=":material/link_off:", width="stretch", key=f"unenroll {sid}"):
+            if st.button("Unenroll From this course", type="tertiary", width="stretch", key=f"unenroll {sid}"):
                 unenroll_student_to_subject(student_id, sid)
                 st.toast(f"unenroll from {sub['name']} successfully")
                 st.rerun()
@@ -87,7 +87,7 @@ def student_dashboard():
                 footer_callback=unenroll_button
             )
 
-    st.subheader(":material/history: Recent attendance")
+    st.subheader("Recent attendance")
     if logs:
         recent_logs = sorted(logs, key=lambda log: log.get('timestamp') or '', reverse=True)[:5]
         activity = []
@@ -118,10 +118,10 @@ def student_screen():
     with c1:
         header_dashboard()
     with c2:
-        if st.button("Go to home", type="tertiary", icon=":material/home:", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Go to home", type="tertiary", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
-    st.header(":material/face: Login using Face ID", text_alignment="center")
+    st.header("Login using Face ID", text_alignment="center")
     st.space()
     st.space()
     show_registration = False
@@ -155,7 +155,7 @@ def student_screen():
                     show_registration = True
     if show_registration:
         with st.container(border=True):
-            st.header(":material/person_add: Register New Profile")
+            st.header("Register New Profile")
             new_name = st.text_input(
                 "Enter Your Name", placeholder="e.g. Kabir")
             new_email = st.text_input(
@@ -163,7 +163,7 @@ def student_screen():
             new_phone = st.text_input(
                 "Parent Phone", placeholder="e.g +91 1234567890")
 
-            st.subheader(":material/graphic_eq: Optional Voice Enrollment")
+            st.subheader("Optional Voice Enrollment")
             st.info("Enroll for voice only attendance")
 
             audio_data = None
@@ -174,7 +174,7 @@ def student_screen():
             except Exception:
                 st.error("Audio Failed")
 
-            if st.button("Create Account", type="primary", icon=":material/person_add:"):
+            if st.button("Create Account", type="primary"):
                 if new_name and new_email:
                     with st.spinner("Creating new profile..."):
                         img = np.array(Image.open(photo_source))

@@ -13,7 +13,7 @@ def auto_enroll_dialog(subject_code):
         'subject_code', subject_code).execute()
     if not res.data:
         st.error('Subject Code not found!')
-        if st.button('Close', icon=':material/close:'):
+        if st.button('Close'):
             st.query_params.clear()
             st.rerun()
         return
@@ -23,18 +23,18 @@ def auto_enroll_dialog(subject_code):
         '*').eq('subject_id', subject['subject_id']).eq('student_id', student_id).execute()
     if check.data:
         st.info('Youre already enrolled!')
-        if st.button('Got it!', icon=':material/check:'):
+        if st.button('Got it!'):
             st.query_params.clear()
             st.rerun()
         return
     st.markdown('''Would you like to enroll in **{subject['name']}**?''')
     col1, col2 = st.columns(2)
     with col1:
-        if st.button('No thanks', icon=':material/close:'):
+        if st.button('No thanks'):
             st.query_params.clear()
             st.rerun()
     with col2:
-        if st.button('Yes enroll now!', type='primary', icon=':material/library_add:', width='stretch'):
+        if st.button('Yes enroll now!', type='primary', width='stretch'):
             enroll_student_to_subject(student_id, subject['subject_id'])
             st.success('Joined succesfully!')
             st.query_params.clear()

@@ -15,7 +15,7 @@ def voice_attendance_dialog(selected_subject_id):
 
     audio_data = st.audio_input("Record classroom audio")
 
-    if st.button('Analyze Audio', width='stretch', type='primary', icon=':material/graphic_eq:'):
+    if st.button('Analyze Audio', width='stretch', type='primary'):
         # Fix: stop if nothing has been recorded yet
         if audio_data is None:
             st.warning("Please record audio first")

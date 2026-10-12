@@ -29,7 +29,7 @@ def home_screen():
             '<p>Start a class session, review attendance, and manage your subjects.</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Continue as teacher", key="teacher_portal", type="primary", icon=":material/co_present:", width="stretch"):
+        if st.button("Continue as teacher", key="teacher_portal", type="primary", width="stretch"):
             st.session_state["login_type"] = "teacher"
             st.rerun()
 
@@ -42,7 +42,7 @@ def home_screen():
             '<p>See your subjects, check attendance, and join a class with a code.</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Continue as student", key="student_portal", type="secondary", icon=":material/school:", width="stretch"):
+        if st.button("Continue as student", key="student_portal", type="secondary", width="stretch"):
             st.session_state["login_type"] = "student"
             st.rerun()
 

@@ -11,7 +11,7 @@ def enroll_dialog():
     st.write('Enter the subject code provided by your teacher to enroll')
     join_code = st.text_input('Subject Code', placeholder='Eg. CS101')
 
-    if st.button('Enroll now', type='primary', icon=':material/library_add:', width='stretch'):
+    if st.button('Enroll now', type='primary', width='stretch'):
         # Make sure the student typed something
         if join_code:
             # Look up the subject by its code
