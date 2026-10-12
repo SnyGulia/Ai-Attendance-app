@@ -19,16 +19,16 @@ def student_dashboard():
     with c2:
         st.subheader(f"""Welcome {student_data['name']}""")
 
-        if st.button("Logout", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Logout", type="tertiary", icon=":material/logout:", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["is_logged_in"] = False
             del st.session_state.student_data
             st.rerun()
     st.space()
     c1, c2 = st.columns(2)
     with c1:
-        st.header("Your Enrolled Subjects")
+        st.header(":material/auto_stories: Your Enrolled Subjects")
     with c2:
-        if st.button("Enroll in subjects", type="primary", width="stretch"):
+        if st.button("Enroll in subjects", type="primary", icon=":material/add_circle:", width="stretch"):
             enroll_dialog()
 
     st.divider()
@@ -89,7 +89,7 @@ def student_screen():
         if st.button("GO To Home", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
-    st.header("Login using Faceid", text_alignment="center")
+    st.header(":material/face: Login using Face ID", text_alignment="center")
     st.space()
     st.space()
     show_registration = False
@@ -123,7 +123,7 @@ def student_screen():
                     show_registration = True
     if show_registration:
         with st.container(border=True):
-            st.header("Register New Profile")
+            st.header(":material/person_add: Register New Profile")
             new_name = st.text_input(
                 "Enter Your Name", placeholder="e.g. Kabir")
             new_email = st.text_input(
@@ -131,7 +131,7 @@ def student_screen():
             new_phone = st.text_input(
                 "Parent Phone", placeholder="e.g +91 1234567890")
 
-            st.subheader("Optional  Voice Enrollment")
+            st.subheader(":material/graphic_eq: Optional Voice Enrollment")
             st.info("Enroll for voice only attendance")
 
             audio_data = None
@@ -142,7 +142,7 @@ def student_screen():
             except Exception:
                 st.error("Audio Failed")
 
-            if st.button("Create Account ", type="primary"):
+            if st.button("Create Account", type="primary", icon=":material/person_add:"):
                 if new_name and new_email:
                     with st.spinner("Creating new profile..."):
                         img = np.array(Image.open(photo_source))

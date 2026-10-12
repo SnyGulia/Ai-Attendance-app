@@ -38,7 +38,7 @@ def teacher_dashboard():
     with c2:
         st.subheader(f"""Welcome {teacher_data['name']}""")
 
-        if st.button("Logout", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Logout", type="tertiary", icon=":material/logout:", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["is_logged_in"] = False
             del st.session_state.teacher_data
             st.rerun()
@@ -49,19 +49,19 @@ def teacher_dashboard():
 
     with tab1:
         type1 = "primary" if st.session_state.current_teacher_tab == "take_attendance" else "tertiary"
-        if st.button("Take Attendance", type=type1, width="stretch"):
+        if st.button("Take Attendance", type=type1, icon=":material/how_to_reg:", width="stretch"):
             st.session_state.current_teacher_tab = "take_attendance"
             st.rerun()
 
     with tab2:
         type2 = "primary" if st.session_state.current_teacher_tab == "manage_subjects" else "tertiary"
-        if st.button("Manage Subjects", type=type2, width="stretch"):
+        if st.button("Manage Subjects", type=type2, icon=":material/menu_book:", width="stretch"):
             st.session_state.current_teacher_tab = "manage_subjects"
             st.rerun()
 
     with tab3:
         type3 = "primary" if st.session_state.current_teacher_tab == "attendance_records" else "tertiary"
-        if st.button("Attendance Records", type=type3, width="stretch"):
+        if st.button("Attendance Records", type=type3, icon=":material/analytics:", width="stretch"):
             st.session_state.current_teacher_tab = "attendance_records"
             st.rerun()
     st.divider()
@@ -76,7 +76,7 @@ def teacher_dashboard():
 
 def teacher_tab_take_attendance():
     teacher_id = st.session_state.teacher_data['teacher_id']
-    st.header('Take AI Attendance')
+    st.header(':material/face: Take AI Attendance')
 
     if 'attendance_images' not in st.session_state:
         st.session_state.attendance_images = []
@@ -233,7 +233,7 @@ def teacher_tab_manage_subjects():
 
 
 def teacher_tab_attendance_records():
-    st.header("Attendance Records")
+    st.header(":material/analytics: Attendance Records")
 
     teacher_id = st.session_state.teacher_data["teacher_id"]
     records = get_attendance_for_teacher(teacher_id)
@@ -283,7 +283,7 @@ def teacher_tab_attendance_records():
     st.download_button("Download CSV", display_df.to_csv(index=False),
                        "attendance_records.csv", "text/csv")
 
-    st.subheader("Student-wise attendance")
+    st.subheader(":material/groups: Student-wise attendance")
     stu = df.groupby("Student")["is_present"].agg(
         Present="sum", Total="count").reset_index()
     stu["Percentage"] = (stu["Present"] / stu["Total"] * 100).round(1)
@@ -315,7 +315,7 @@ def teacher_screen_login():
         if st.button("GO To Home", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
-    st.header("Login Using Password", text_alignment="center")
+    st.header(":material/lock: Login Using Password", text_alignment="center")
     st.space()
     teacher_username = st.text_input("Enter Username", placeholder="Manoj")
     teacher_pass = st.text_input(
@@ -362,7 +362,7 @@ def teacher_screen_register():
         if st.button("GO To Home", type="secondary", key="registerbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
-    st.header("Register Your Teacher Account")
+    st.header(":material/person_add: Register Your Teacher Account")
     st.space()
     st.space()
     teacher_username = st.text_input(

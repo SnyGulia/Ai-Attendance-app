@@ -23,23 +23,23 @@ def home_screen():
     teacher_col, student_col = st.columns(2, gap="large")
     with teacher_col:
         st.markdown(
-            '<div class="portal-card"><div class="portal-icon">✦</div>'
+            '<div class="portal-card"><div class="portal-icon">&#10022;</div>'
             '<div class="portal-kicker">FOR EDUCATORS</div><h2>Teacher portal</h2>'
             '<p>Start a class session, review attendance, and manage your subjects.</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Continue as teacher", key="teacher_portal", type="primary", width="stretch"):
+        if st.button("Continue as teacher", key="teacher_portal", type="primary", icon=":material/co_present:", width="stretch"):
             st.session_state["login_type"] = "teacher"
             st.rerun()
 
     with student_col:
         st.markdown(
-            '<div class="portal-card"><div class="portal-icon student-icon">◎</div>'
+            '<div class="portal-card"><div class="portal-icon student-icon">&#9678;</div>'
             '<div class="portal-kicker">FOR STUDENTS</div><h2>Student portal</h2>'
             '<p>See your subjects, check attendance, and join a class with a code.</p></div>',
             unsafe_allow_html=True,
         )
-        if st.button("Continue as student", key="student_portal", type="primary", width="stretch"):
+        if st.button("Continue as student", key="student_portal", type="secondary", icon=":material/school:", width="stretch"):
             st.session_state["login_type"] = "student"
             st.rerun()
 
