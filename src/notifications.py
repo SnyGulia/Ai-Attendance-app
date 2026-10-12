@@ -1,20 +1,26 @@
 import smtplib
 import streamlit as st
 from email.message import EmailMessage
+import requests
 
 
 def send_email(to, subject, body):
-    msg = EmailMessage()
-    msg["From"] = st.secrets["EMAIL_USER"]
-    msg["To"] = to
-    msg["Subject"] = subject
-    msg.set_content(body)
-    with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
-        s.ehlo()
-        s.starttls()
-        s.ehlo()
-        s.login(st.secrets["EMAIL_USER"], st.secrets["EMAIL_APP_PASSWORD"])
-        s.send_message(msg)
+    r = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers={
+            "api-key": st.secrets["BREVO_API_KEY"],
+            "content-type": "application/json",
+        },
+        json={
+            "sender": {"name": "Snap Class", "email": st.secrets["SENDER_EMAIL"]},
+            "to": [{"email": to}],
+            "subject": subject,
+            "textContent": body,
+        },
+        timeout=30,
+    )
+    if r.status_code >= 400:
+        raise Exception(f"Brevo {r.status_code}: {r.text}")
 
 
 def send_sms(to, body):
@@ -30,8 +36,6 @@ def notify_absentees(absent_students, subject_name):
         try:
             if s.get("email"):
                 send_email(s["email"], "Absence notice", text)
-            if s.get("parent_phone"):
-                send_sms(s["parent_phone"], text)
             sent += 1
         except Exception as e:
             failed += 1
