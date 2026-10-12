@@ -1,29 +1,53 @@
 import streamlit as st
-from PIL import Image
-from src.database.db import enroll_student_to_subject
-from src.database.config import supabase
 from src.database.db import create_attendance
 
-import time
 
-
-def show_attendance_result(df, logs):
+def show_attendance_result(df, logs, subject_name):
     st.write('Please review attendance before confirming.')
-    st.dataframe(df, hide_index=True, width='stretch')
+    edited_df = st.data_editor(
+        df,
+        hide_index=True,
+        width='stretch',
+        disabled=['Name', 'ID', 'Source'],
+        column_config={
+            'Status': st.column_config.SelectboxColumn(
+                'Status',
+                options=['✅ Present', '❌ Absent'],
+                required=True,
+            )
+        },
+    )
 
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button('Discard', width='stretch', icon=':material/delete_outline:'):
+        if st.button('Discard', width='stretch'):
             st.session_state.voice_attendance_results = None
             st.session_state.attendance_images = []
-
             st.rerun()
 
     with col2:
-        if st.button('Confirm & Save', width='stretch', type='primary', icon=':material/save:'):
+        if st.button('Confirm & Save', width='stretch', type='primary'):
             try:
-                create_attendance(logs)
+                status_by_id = {
+                    str(row['ID']): row['Status'] == '✅ Present'
+                    for _, row in edited_df.iterrows()
+                }
+                updated_logs = [
+                    {
+                        **log,
+                        'is_present': status_by_id[str(log['student_id'])],
+                    }
+                    for log in logs
+                ]
+
+                create_attendance(updated_logs)
+                st.session_state.absent_ids = [
+                    log['student_id']
+                    for log in updated_logs
+                    if not log['is_present']
+                ]
+                st.session_state.absent_subject_name = subject_name
                 st.toast("Attendance taken")
                 st.session_state.attendance_images = []
                 st.session_state.voice_attendance_results = None
@@ -33,5 +57,5 @@ def show_attendance_result(df, logs):
 
 
 @st.dialog("Attendance Reports")
-def attendance_result_dialog(df, logs):
-    show_attendance_result(df, logs)
+def attendance_result_dialog(df, logs, subject_name):
+    show_attendance_result(df, logs, subject_name)
