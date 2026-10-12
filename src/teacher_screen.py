@@ -238,40 +238,59 @@ def teacher_tab_attendance_records():
     teacher_id = st.session_state.teacher_data["teacher_id"]
     records = get_attendance_for_teacher(teacher_id)
     if not records:
+        st.info("No attendance records yet.")
         return
-    data = []
 
+    data = []
     for r in records:
         ts = r.get("timestamp")
-
+        student = r.get("students") or {}
         data.append({
             "ts_group": ts.split(".")[0] if ts else None,
-            "Time": datetime.fromisoformat(ts).strftime("%Y-%m-%d %I:%M %p") if ts else "N'A",
+            "Time": datetime.fromisoformat(ts).strftime("%Y-%m-%d %I:%M %p") if ts else "N/A",
             "Subject": r['subjects']['name'],
             "Subject Code": r['subjects']['subject_code'],
-            "is_present": bool(r.get('is_present', False))
+            "Student": student.get("name", "Unknown"),
+            "is_present": bool(r.get('is_present', False)),
         })
 
     df = pd.DataFrame(data)
 
-    summary = (
-        df.groupby(['ts_group', 'Time', 'Subject', 'Subject Code'])
-        .agg(
-            Present_Count=('is_present', 'sum'),
-            Total_Count=('is_present', 'count')
-        ).reset_index()
+    subject_list = ["All"] + sorted(df["Subject"].unique().tolist())
+    chosen = st.selectbox("Filter by subject", subject_list)
+    if chosen != "All":
+        df = df[df["Subject"] == chosen]
 
-    )
+    rows = []
+    for (ts_group, time, subject, code), g in df.groupby(
+            ['ts_group', 'Time', 'Subject', 'Subject Code']):
+        absent = g.loc[~g["is_present"], "Student"].tolist()
+        present = g.loc[g["is_present"], "Student"].tolist()
+        rows.append({
+            "ts_group": ts_group,
+            "Time": time,
+            "Subject": subject,
+            "Code": code,
+            "Attendance": f"✅ {len(present)}/{len(g)}",
+            "Absent Students": ", ".join(absent) if absent else "None",
+            "Present Students": ", ".join(present) if present else "None",
+        })
 
-    summary['Attendance Stats'] = (
-        "✅ " + summary['Present_Count'].astype(str) + " /"
-        + summary['Total_Count'].astype(str) + ' Students'
-    )
-
-    display_df = (summary.sort_values(by='ts_group', ascending=False)
-                  [["Time", "Subject", "Subject Code", "Attendance Stats"]])
+    summary = pd.DataFrame(rows).sort_values("ts_group", ascending=False)
+    display_df = summary.drop(columns=["ts_group"])
 
     st.dataframe(display_df, width="stretch", hide_index=True)
+    st.download_button("Download CSV", display_df.to_csv(index=False),
+                       "attendance_records.csv", "text/csv")
+
+    st.subheader("Student-wise attendance")
+    stu = df.groupby("Student")["is_present"].agg(
+        Present="sum", Total="count").reset_index()
+    stu["Percentage"] = (stu["Present"] / stu["Total"] * 100).round(1)
+    stu["Status"] = stu["Percentage"].apply(
+        lambda p: "⚠️ Low" if p < 75 else "✅ Good")
+    st.dataframe(stu.sort_values("Percentage"),
+                 width="stretch", hide_index=True)
 
 
 def login_teacher(username, password):
