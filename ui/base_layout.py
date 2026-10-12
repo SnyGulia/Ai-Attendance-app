@@ -40,7 +40,7 @@ def style_base_home():
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
             background:radial-gradient(ellipse at 10% 4%,#eee9ff 0,transparent 42%),radial-gradient(ellipse at 92% 12%,#fff0e8 0,transparent 32%),#f8f7fb !important;
         }
-        [data-testid="stMainBlockContainer"] { max-width: 920px; padding-top: 2rem; }
+        [data-testid="stMainBlockContainer"] { max-width: 920px; padding-top: 0.5rem; }
         .brand-lockup { display:flex; align-items:center; gap:12px; margin: 0 0 3rem; }
         .brand-mark { display:inline-flex; width:54px; height:54px; align-items:center;
             justify-content:center; border-radius:14px; background:linear-gradient(135deg,#6546f5,#8b5cf6); color:#fff;
@@ -87,7 +87,7 @@ def style_background_dashboard():
             background:radial-gradient(ellipse at 8% 0%, #eee9ff 0, transparent 34%),
                        radial-gradient(ellipse at 96% 8%, #fff0e8 0, transparent 30%), #f8f7fb !important;
         }
-        [data-testid="stMainBlockContainer"] { max-width:1120px; padding-top:1.5rem; padding-bottom:3rem; }
+        [data-testid="stMainBlockContainer"] { max-width:1120px; padding-top:0.5rem; padding-bottom:3rem; }
         </style>
         """,
         unsafe_allow_html=True,
