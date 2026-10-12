@@ -58,7 +58,7 @@ def student_dashboard():
         stats = stats_map.get(sid, {"total": 0, "attended": 0})
 
         def unenroll_button():
-            if st.button("Unenroll From this course", type="tertiary", width="stretch", key=f"unenroll {sid}"):
+            if st.button("Unenroll From this course", type="tertiary", icon=":material/link_off:", width="stretch", key=f"unenroll {sid}"):
                 unenroll_student_to_subject(student_id, sid)
                 st.toast(f"unenroll from {sub['name']} successfully")
                 st.rerun()
@@ -86,7 +86,7 @@ def student_screen():
     with c1:
         header_dashboard()
     with c2:
-        if st.button("GO To Home", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Go to home", type="tertiary", icon=":material/home:", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
     st.header(":material/face: Login using Face ID", text_alignment="center")

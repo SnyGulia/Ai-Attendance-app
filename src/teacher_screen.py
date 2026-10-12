@@ -178,7 +178,7 @@ def teacher_tab_take_attendance():
                         pd.DataFrame(results), attendance_to_log)
 
     with c3:
-        if st.button("Voice Attendance", type="primary", width="stretch"):
+        if st.button("Voice Attendance", type="primary", icon=":material/graphic_eq:", width="stretch"):
             voice_attendance_dialog(selected_subject_id)
 
     # Notify absentees (email / SMS)
@@ -186,7 +186,7 @@ def teacher_tab_take_attendance():
         st.divider()
         st.write(
             f"{len(st.session_state.absent_ids)} student(s) marked absent")
-        if st.button("Notify absentees", type="primary"):
+        if st.button("Notify absentees", type="primary", icon=":material/notifications_active:"):
             absent_students = get_students_by_ids(
                 st.session_state.absent_ids)
             sent, failed, errors = notify_absentees(
@@ -201,9 +201,9 @@ def teacher_tab_manage_subjects():
     teacher_id = st.session_state.teacher_data['teacher_id']
     col1, col2 = st.columns(2)
     with col1:
-        st.header("Manage Subject", width="stretch")
+        st.header(":material/menu_book: Manage Subjects", width="stretch")
     with col2:
-        if st.button("New Subject", width="stretch"):
+        if st.button("New Subject", width="stretch", type="primary", icon=":material/add:"):
             create_subject_dialog(teacher_id)
 
    # List All Subjects
@@ -281,7 +281,7 @@ def teacher_tab_attendance_records():
 
     st.dataframe(display_df, width="stretch", hide_index=True)
     st.download_button("Download CSV", display_df.to_csv(index=False),
-                       "attendance_records.csv", "text/csv")
+                       "attendance_records.csv", "text/csv", icon=":material/download:")
 
     st.subheader(":material/groups: Student-wise attendance")
     stu = df.groupby("Student")["is_present"].agg(
@@ -312,7 +312,7 @@ def teacher_screen_login():
     with c1:
         header_dashboard()
     with c2:
-        if st.button("GO To Home", type="secondary", key="loginbackbtn", shortcut="ctrl+h"):
+        if st.button("Go to home", type="tertiary", icon=":material/home:", key="loginbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
     st.header(":material/lock: Login Using Password", text_alignment="center")
@@ -323,7 +323,7 @@ def teacher_screen_login():
     st.divider()
     btnc1, btnc2 = st.columns(2)
     with btnc1:
-        if st.button("Login",
+        if st.button("Login", icon=":material/login:",
                      shortcut="Enter", width="stretch"):
             if login_teacher(teacher_username, teacher_pass):
                 st.toast("Welcome Back")
@@ -333,7 +333,7 @@ def teacher_screen_login():
             else:
                 st.error("Invalid Info Entered")
     with btnc2:
-        if st.button("Register", type="primary", width="stretch", key="go_to_password"):
+        if st.button("Register", type="secondary", icon=":material/person_add:", width="stretch", key="go_to_password"):
             st.session_state.teacher_login_type = "register"
             st.rerun()
 
@@ -359,7 +359,7 @@ def teacher_screen_register():
     with c1:
         header_dashboard()
     with c2:
-        if st.button("GO To Home", type="secondary", key="registerbackbtn", shortcut="ctrl+h"):
+        if st.button("Go to home", type="tertiary", icon=":material/home:", key="registerbackbtn", shortcut="ctrl+h"):
             st.session_state["login_type"] = None
             st.rerun()
     st.header(":material/person_add: Register Your Teacher Account")
@@ -376,7 +376,7 @@ def teacher_screen_register():
     st.divider()
     btnc1, btnc2 = st.columns(2)
     with btnc1:
-        if st.button("Register",
+        if st.button("Register", icon=":material/person_add:",
                      shortcut="Enter", width="stretch", key="register_submit"):
             success, message = register_teacher(
                 teacher_username, teacher_name, teacher_pass, teacher_pass_confirm)
@@ -389,6 +389,6 @@ def teacher_screen_register():
             else:
                 st.error(message)
     with btnc2:
-        if st.button("Login", type="primary", width="stretch", key="goto_login"):
+        if st.button("Login", type="secondary", icon=":material/login:", width="stretch", key="goto_login"):
             st.session_state.teacher_login_type = "login"
             st.rerun()

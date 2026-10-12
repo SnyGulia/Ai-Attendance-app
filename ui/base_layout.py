@@ -101,6 +101,12 @@ def style_base_layout():
         """
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+        .brand-lockup { display:flex; align-items:center; gap:12px; margin:0 0 1.4rem; }
+        .brand-mark { display:inline-flex; width:42px; height:42px; align-items:center; justify-content:center;
+            border-radius:14px; background:linear-gradient(135deg,#6546f5,#8b5cf6); color:#fff;
+            font:800 15px 'Outfit',sans-serif; letter-spacing:-1px; }
+        .brand-name { color:#18323b; font:750 24px 'Outfit',sans-serif; letter-spacing:-.7px; }
+        .brand-name span { color:#7653ef; }
         h1,h2,h3,h4,p,button,[data-testid="stHeading"] * {
             font-family:'Outfit',sans-serif !important;
         }
@@ -135,6 +141,12 @@ def style_base_layout():
         }
         button[kind="tertiary"], button[data-testid="stBaseButton-tertiary"] {
             background:#eee9ff !important; color:#6444dc !important; border:1px solid #e0d8ff !important; border-radius:10px !important;
+        }
+        button[kind="primary"], button[kind="secondary"], button[kind="tertiary"] {
+            transition:transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
+        }
+        button[kind="primary"]:hover, button[kind="secondary"]:hover, button[kind="tertiary"]:hover {
+            transform:translateY(-1px) !important; filter:saturate(1.08) !important;
         }
         [data-testid="stTextInputRootElement"], [data-testid="stTextInput"] [data-baseweb="input"] {
             border:1px solid #ded9ea !important; border-radius:10px !important; background:#fff !important;
