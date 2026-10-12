@@ -189,9 +189,11 @@ def teacher_tab_take_attendance():
         if st.button("Notify absentees", type="primary"):
             absent_students = get_students_by_ids(
                 st.session_state.absent_ids)
-            sent, failed = notify_absentees(
+            sent, failed, errors = notify_absentees(
                 absent_students, st.session_state.absent_subject_name)
             st.success(f"Sent: {sent}, Failed: {failed}")
+            for err in errors:
+                st.error(err)
             st.session_state.absent_ids = []
 
 

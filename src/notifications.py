@@ -9,7 +9,10 @@ def send_email(to, subject, body):
     msg["To"] = to
     msg["Subject"] = subject
     msg.set_content(body)
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
+    with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
         s.login(st.secrets["EMAIL_USER"], st.secrets["EMAIL_APP_PASSWORD"])
         s.send_message(msg)
 
@@ -21,7 +24,7 @@ def send_sms(to, body):
 
 
 def notify_absentees(absent_students, subject_name):
-    sent, failed = 0, 0
+    sent, failed, errors = 0, 0, []
     for s in absent_students:
         text = f"{s['name']} was marked absent in {subject_name} today."
         try:
@@ -30,6 +33,7 @@ def notify_absentees(absent_students, subject_name):
             if s.get("parent_phone"):
                 send_sms(s["parent_phone"], text)
             sent += 1
-        except Exception:
+        except Exception as e:
             failed += 1
-    return sent, failed
+            errors.append(f"{s['name']}:{type(e).__name__}: {e}")
+    return sent, failed, errors
