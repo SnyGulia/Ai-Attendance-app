@@ -2,24 +2,13 @@ import streamlit as st
 
 
 def footer_home():
-    st.markdown("""
+    st.markdown(
+        """
         <style>
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #1e1e5a;
-            color: white;
-            text-align: center;
-            padding: 0.8rem 0;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
-            z-index: 999;
-        }
+        .footer { margin:2rem 0 0; padding:1rem 0; text-align:center;
+            color:#718187; font:500 12px 'Outfit',sans-serif; }
         </style>
-
-        <div class="footer">
-            Created by Sunny Gulia <span style="color:#ff2d55;">❤️</span>
-        </div>
-    """, unsafe_allow_html=True)
+        <div class="footer">ClassPulse · Classroom attendance, made easier</div>
+        """,
+        unsafe_allow_html=True,
+    )

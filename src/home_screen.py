@@ -5,21 +5,47 @@ from src.components.footer import footer_home
 
 
 def home_screen():
-    header_home()
     style_base_home()
     style_base_layout()
-    col1, col2 = st.columns(2, gap="large")
-    with col1:
-        st.header("Teacher Portal")
-        st.image("https://cdn-icons-png.flaticon.com/128/5369/5369664.png", width=100)
-        if st.button("Teacher Portal", ):
+    header_home()
+
+    st.markdown(
+        """
+        <section class="hero-copy">
+            <div class="eyebrow">SMARTER CLASSROOM ROUTINES</div>
+            <h1>Attendance that keeps<br><span>class moving.</span></h1>
+            <p>Take attendance with AI, review the results, and keep every class record in one place.</p>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    teacher_col, student_col = st.columns(2, gap="large")
+    with teacher_col:
+        st.markdown(
+            '<div class="portal-card"><div class="portal-icon">✦</div>'
+            '<div class="portal-kicker">FOR EDUCATORS</div><h2>Teacher portal</h2>'
+            '<p>Start a class session, review attendance, and manage your subjects.</p></div>',
+            unsafe_allow_html=True,
+        )
+        if st.button("Continue as teacher", key="teacher_portal", type="primary", width="stretch"):
             st.session_state["login_type"] = "teacher"
             st.rerun()
-    with col2:
-        st.header("Student Portal")
-        st.image("https://cdn-icons-png.flaticon.com/128/2995/2995459.png", width=100)
-        if st.button("Student Portal"):
+
+    with student_col:
+        st.markdown(
+            '<div class="portal-card"><div class="portal-icon student-icon">◎</div>'
+            '<div class="portal-kicker">FOR STUDENTS</div><h2>Student portal</h2>'
+            '<p>See your subjects, check attendance, and join a class with a code.</p></div>',
+            unsafe_allow_html=True,
+        )
+        if st.button("Continue as student", key="student_portal", type="primary", width="stretch"):
             st.session_state["login_type"] = "student"
             st.rerun()
 
+    st.markdown(
+        '<div class="home-note"><span>AI-assisted attendance</span><span>·</span>'
+        '<span>Teacher-reviewed records</span><span>·</span><span>One simple workflow</span></div>',
+        unsafe_allow_html=True,
+    )
     footer_home()
