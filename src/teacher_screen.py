@@ -32,6 +32,9 @@ def teacher_screen():
 
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
+    teacher_id = teacher_data['teacher_id']
+    subjects = get_teacher_subjects(teacher_id)
+    records = get_attendance_for_teacher(teacher_id)
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
     with c1:
         header_dashboard()
@@ -42,6 +45,46 @@ def teacher_dashboard():
             st.session_state["is_logged_in"] = False
             del st.session_state.teacher_data
             st.rerun()
+
+    present_count = sum(bool(record.get('is_present')) for record in records)
+    attendance_rate = round(present_count / len(records) * 100) if records else 0
+    session_keys = {
+        (record.get('subject_id'), (record.get('timestamp') or '').split('.')[0])
+        for record in records if record.get('timestamp')
+    }
+    metrics = st.columns(4)
+    metrics[0].metric("Subjects", len(subjects), help="Subjects you manage")
+    metrics[1].metric("Student enrollments", sum(s.get('total_students', 0) for s in subjects), help="Enrollment count across your subjects")
+    metrics[2].metric("Class sessions", len(session_keys), help="Sessions with attendance records")
+    metrics[3].metric("Attendance rate", f"{attendance_rate}%", help="Present records divided by all attendance records")
+
+    st.subheader(":material/history: Recent class sessions")
+    if records:
+        sessions = {}
+        for record in records:
+            timestamp = record.get('timestamp')
+            if not timestamp:
+                continue
+            subject = record.get('subjects') or {}
+            key = (record.get('subject_id'), timestamp.split('.')[0])
+            session = sessions.setdefault(key, {
+                "Time": timestamp,
+                "Subject": subject.get('name', 'Unknown subject'),
+                "Present": 0,
+                "Students": 0,
+            })
+            session["Present"] += int(bool(record.get('is_present')))
+            session["Students"] += 1
+        recent_sessions = sorted(sessions.values(), key=lambda item: item['Time'], reverse=True)[:4]
+        for session in recent_sessions:
+            try:
+                session['Time'] = datetime.fromisoformat(session['Time']).strftime("%b %d, %I:%M %p")
+            except ValueError:
+                pass
+        st.dataframe(pd.DataFrame(recent_sessions), width="stretch", hide_index=True)
+    else:
+        st.info("No sessions yet. Start by taking attendance for one of your subjects.")
+
     st.space()
     if "current_teacher_tab" not in st.session_state:
         st.session_state.current_teacher_tab = "take_attendance"
@@ -67,21 +110,22 @@ def teacher_dashboard():
     st.divider()
 
     if st.session_state.current_teacher_tab == "take_attendance":
-        teacher_tab_take_attendance()
+        teacher_tab_take_attendance(subjects)
     if st.session_state.current_teacher_tab == "manage_subjects":
-        teacher_tab_manage_subjects()
+        teacher_tab_manage_subjects(subjects)
     if st.session_state.current_teacher_tab == "attendance_records":
-        teacher_tab_attendance_records()
+        teacher_tab_attendance_records(records)
 
 
-def teacher_tab_take_attendance():
+def teacher_tab_take_attendance(subjects=None):
     teacher_id = st.session_state.teacher_data['teacher_id']
     st.header(':material/face: Take AI Attendance')
 
     if 'attendance_images' not in st.session_state:
         st.session_state.attendance_images = []
 
-    subjects = get_teacher_subjects(teacher_id)
+    if subjects is None:
+        subjects = get_teacher_subjects(teacher_id)
 
     if not subjects:
         st.warning(
@@ -197,7 +241,7 @@ def teacher_tab_take_attendance():
             st.session_state.absent_ids = []
 
 
-def teacher_tab_manage_subjects():
+def teacher_tab_manage_subjects(subjects=None):
     teacher_id = st.session_state.teacher_data['teacher_id']
     col1, col2 = st.columns(2)
     with col1:
@@ -208,7 +252,8 @@ def teacher_tab_manage_subjects():
 
    # List All Subjects
    # LIST all SUBJECTS
-    subjects = get_teacher_subjects(teacher_id)
+    if subjects is None:
+        subjects = get_teacher_subjects(teacher_id)
     if subjects:
         for sub in subjects:
             stats = [
@@ -232,11 +277,12 @@ def teacher_tab_manage_subjects():
         st.info("NO SUBJECTS FOUND. CREATE ONE ABOVE")
 
 
-def teacher_tab_attendance_records():
+def teacher_tab_attendance_records(records=None):
     st.header(":material/analytics: Attendance Records")
 
     teacher_id = st.session_state.teacher_data["teacher_id"]
-    records = get_attendance_for_teacher(teacher_id)
+    if records is None:
+        records = get_attendance_for_teacher(teacher_id)
     if not records:
         st.info("No attendance records yet.")
         return

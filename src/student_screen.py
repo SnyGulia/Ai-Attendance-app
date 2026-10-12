@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 from ui.base_layout import style_background_dashboard, style_base_layout
 from src.components.header import header_dashboard
 from PIL import Image
@@ -23,6 +24,19 @@ def student_dashboard():
             st.session_state["is_logged_in"] = False
             del st.session_state.student_data
             st.rerun()
+
+    with st.spinner("Loading your dashboard..."):
+        subjects = get_student_subjects(student_id)
+        logs = get_student_attendance(student_id)
+
+    total_classes = len(logs)
+    attended_classes = sum(bool(log.get('is_present')) for log in logs)
+    attendance_rate = round(attended_classes / total_classes * 100) if total_classes else 0
+    metrics = st.columns(3)
+    metrics[0].metric("Enrolled subjects", len(subjects), help="Your current classes")
+    metrics[1].metric("Classes recorded", total_classes, help="Attendance entries across all subjects")
+    metrics[2].metric("Your attendance", f"{attendance_rate}%", help="Attended classes divided by all recorded classes")
+
     st.space()
     c1, c2 = st.columns(2)
     with c1:
@@ -32,10 +46,8 @@ def student_dashboard():
             enroll_dialog()
 
     st.divider()
-
-    with st.spinner("Loading Your Subjets...."):
-        subjects = get_student_subjects(student_id)
-        logs = get_student_attendance(student_id)
+    if not subjects:
+        st.info("You haven’t joined any subjects yet. Enroll with the code from your teacher to get started.")
 
     stats_map = {}
 
@@ -74,6 +86,26 @@ def student_dashboard():
                 ],
                 footer_callback=unenroll_button
             )
+
+    st.subheader(":material/history: Recent attendance")
+    if logs:
+        recent_logs = sorted(logs, key=lambda log: log.get('timestamp') or '', reverse=True)[:5]
+        activity = []
+        for log in recent_logs:
+            subject = log.get('subjects') or {}
+            timestamp = log.get('timestamp') or ''
+            try:
+                timestamp = datetime.fromisoformat(timestamp).strftime("%b %d, %I:%M %p")
+            except ValueError:
+                pass
+            activity.append({
+                "Date": timestamp or "Unknown",
+                "Subject": subject.get('name', 'Unknown subject'),
+                "Status": "Present" if log.get('is_present') else "Absent",
+            })
+        st.dataframe(activity, width="stretch", hide_index=True)
+    else:
+        st.info("Your attendance activity will appear here after your first class.")
 
 
 def student_screen():
